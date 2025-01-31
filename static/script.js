@@ -1,64 +1,87 @@
-// Array to store book data
-const books = [];
+// script.js
 
-// Function to add a book to the list and send it to the server
-function addBook() {
-    const bookTitle = document.getElementById('bookTitle').value;
+function submitApplication() {
+    const name = document.getElementById('applicantName').value;
+    const zipcode = document.getElementById('zipCode').value;
     
-    // Create a JSON object with book data
-    const bookData = {
-        title: bookTitle
-    };
+    if (!name || !zipcode) {
+        alert('Please fill in all fields');
+        return;
+    }
 
-    // Send the book data to the server via POST request
-    fetch('/api/add_book', {
+    fetch('/api/submit_application', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(bookData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Display a success message or handle errors if needed
-            console.log(data.message);
-
-            // Add the new book data to the books array
-            books.push(bookData);
-            console.log(books)
-
-            // Refresh the book list
-            displayBooks();
+        body: JSON.stringify({
+            name: name,
+            zipcode: zipcode
         })
-        .catch(error => {
-            console.error('Error adding book:', error);
-        });
-}
-
-// Function to display books in the list
-function displayBooks() {
-    const bookList = document.getElementById('bookList');
-    bookList.innerHTML = ''; // Clear existing book list
-
-    books.forEach(book => { 
-        const bookElement = document.createElement('div');
-        bookElement.innerHTML = `
-            <h2>Added Successfully :${book.title}</h2>
-        `;
-        bookList.appendChild(bookElement);
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(`Application submitted successfully!\nYour application number is: ${data.application_number}`);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting application');
     });
 }
-// Function to fetch and display all books from the server
-function showAllBooks() {
-    fetch('/api/books')
-        .then(response => response.json())
-        .then(data => {
-            const bookList = document.getElementById('allbooks');
-            bookList.innerHTML = ''; // Clear existing book list
-            console.log(data);
-            bookList.textContent = JSON.stringify(data); // Display the list as a string
+
+function checkStatus() {
+    const appNumber = document.getElementById('checkAppNumber').value;
+    
+    if (!appNumber) {
+        alert('Please enter an application number');
+        return;
+    }
+
+    fetch('/api/check_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            application_number: appNumber
         })
-        .catch(error => {
-            console.error('Error fetching all books:', error);
-        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('statusResult').textContent = 
+            `Application Status: ${data.status}`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error checking status');
+    });
+}
+
+function updateStatus() {
+    const appNumber = document.getElementById('updateAppNumber').value;
+    const newStatus = document.getElementById('newStatus').value;
+    
+    if (!appNumber || !newStatus) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    fetch('/api/update_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            application_number: appNumber,
+            new_status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status');
+    });
 }

@@ -1,35 +1,40 @@
+<!-- index.html -->
 <html>
-
 <head>
-    <title>Book Reviews</title>
-
+    <title>Acme Financial Corp - Loan Applications</title>
 </head>
-
 <body>
-    <h1>Book Reviews</h1>
-	
-	<!-- Add a div to input book data -->
-    <div id="addBook">
-        <h2>Add a Book</h2>
-        <input type="text" id="bookTitle" placeholder="Book Title">
-        <button onclick="addBook()">Add</button>
-    </div>
-
-
-	<!-- Display books in this div -->
-    <div id="bookList">
-    <!-- Book data will be displayed here dynamically -->
-    </div>
-
-    <button id="showBooksButton" onclick="showAllBooks()">Show All Books</button>	
+    <h1>Acme Financial Corp - Loan Applications</h1>
     
-	<!-- Display books in this div -->
-    <div id="allbooks">
-        <!-- Book data will be displayed here dynamically -->
+    <!-- Application Form -->
+    <div id="applicationForm">
+        <h2>New Loan Application</h2>
+        <input type="text" id="applicantName" placeholder="Full Name">
+        <input type="text" id="zipCode" placeholder="ZIP Code">
+        <button onclick="submitApplication()">Submit Application</button>
     </div>
-    
+
+    <!-- Status Check -->
+    <div id="statusCheck">
+        <h2>Check Application Status</h2>
+        <input type="text" id="checkAppNumber" placeholder="Application Number">
+        <button onclick="checkStatus()">Check Status</button>
+        <div id="statusResult"></div>
+    </div>
+
+    <!-- Status Update (Admin) -->
+    <div id="statusUpdate">
+        <h2>Update Application Status</h2>
+        <input type="text" id="updateAppNumber" placeholder="Application Number">
+        <select id="newStatus">
+            <option value="received">Received</option>
+            <option value="processing">Processing</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <button onclick="updateStatus()">Update Status</button>
+    </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>
